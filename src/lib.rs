@@ -173,12 +173,16 @@ impl Device {
         log::trace!("Got header: {:?}", resp);
         let payload = &buf[32..resp.packet_length as usize];
         log::trace!("Got payload len={}: {:?}", payload.len(), payload);
-        let payload = Self::decode_payload(&self.token, payload);
-        let payload = std::str::from_utf8(&payload)?;
-        if !payload.is_empty() {
-            log::trace!("Decoded payload: {}", payload);
+        let payload = if payload.is_empty() {
+            ""
+        } else {
+            Self::decode_payload(&self.token, payload);
+            let s = std::str::from_utf8(&payload)?;
+            if !s.is_empty() {
+                log::trace!("Decoded payload: {}", payload);
+            }
+            s
         }
-
         Ok((resp, payload.to_string()))
     }
 
