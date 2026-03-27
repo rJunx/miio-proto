@@ -179,10 +179,10 @@ impl Device {
             Self::decode_payload(&self.token, payload);
             let s = std::str::from_utf8(&payload)?;
             if !s.is_empty() {
-                log::trace!("Decoded payload: {}", payload);
+                log::trace!("Decoded payload: {}", s);
             }
             s
-        }
+        };
         Ok((resp, payload.to_string()))
     }
 
